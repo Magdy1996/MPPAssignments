@@ -1,0 +1,29 @@
+@startuml
+actor "Customer" as Customer
+participant "Order" as Order
+participant "OrderLine" as OrderLine
+participant "Product" as Product
+participant "Customer" as CustomerParticipant
+Customer -> Order : 1. calculatePrice()
+activate Order
+Order -> OrderLine : 1.1. calculatePrice()
+activate OrderLine
+OrderLine -> Product : 1.1.1. getPrice(quantity: number)
+activate Product
+Product --> OrderLine : return price
+deactivate Product
+OrderLine-->Order :  return price
+deactivate OrderLine
+Order -> CustomerParticipant : 1.2. getDiscountedValue(an Order)
+activate CustomerParticipant
+CustomerParticipant -> Order : 1.2.1. getBaseValue()
+activate Order 
+Order --> CustomerParticipant : return baseValue
+deactivate Order
+CustomerParticipant --> Order :  return discountedValue
+deactivate CustomerParticipant
+
+Order --> Customer :  return discountedValue
+deactivate Order
+
+@enduml
